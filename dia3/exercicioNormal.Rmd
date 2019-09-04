@@ -1,0 +1,69 @@
+---
+title: "Exercícios de distribuição Normal"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+1) Considere uma variável $Z$ com distribuição normal com média $\mu=0$ e variância $\sigma^2=1$ e calcule as seguintes probabilidades: (Use pnorm)
+
+* $P(Z \leq  -1,55 )$
+* $P(Z \leq 0,73)$
+* $P(Z \geq -0,88)$
+* $P(-1,5 \leq Z 1,5)$
+
+2) Segundo levantamento feito pela Anac, a população adulta brasileira tem altura média de 173cm com desvio-padrão de 7,3cm. Supondo que as alturas sejam representadas pela variável X e a distribuição normal seja adequada e uma pessoa seja escolhida de forma aleatória dessa população, calcule:
+
+* Qual a probabilidade dessa pessoa medir menos de 163cm?  $P(X<163)$
+* Qual a probabilidade dessa pessoa medir menos de 180cm?  $P(X<180)$
+* Qual a probabilidade dessa pessoa medir mais de 170cm?   $P(X>170)$
+* Qual a probabilidade dessa pessoa medir entre 172cm e 175cm? $P(172<X<175)$
+
+###Dica para questão 2: 
+
+Vimos em sala que a tabela é referente a distribuição normal padrão ($\mu=0$ , $\sigma^2=1$) e para calcular probabilidades referentes a uma distribuição normal com diferentes parâmetros é preciso fazer uma transformação para a variável Z com distribuição normal padrão, de forma que: $$Z=\frac{X-\mu}{\sigma}$$
+
+#####Demonstração para aqueles que tem interesse:
+
+Vejamos o sentido e motivo da transformação utilizada por meio de demonstração algébrica semelhante à demonstração de probabilidades que ao subtrair a média dos valores de uma variável o valor da nova média será zero:
+
+$$\bar{x}=\sum_{i=1}^n \frac{x_i}{n}$$ 
+com a subtração $k_i = x_i-\bar{x}$ tem-se:
+
+$$\bar{k}=\sum_{i=1}^n \frac{k_i}{n}=\sum_{i=1}^n \frac{x_i-\bar{x}}{n}=
+\frac{1}{n}\sum_{i=1}^n(x_i-\bar{x})=\frac{1}{n}[x_1-\bar{x}+x_2-\bar{x}+\ldots+x_n-\bar{x}]=
+\frac{1}{n}[x_1+x_2+\ldots+x_n-n\bar{x}]=
+\sum_{i=1}^n \frac{x_i}{n}-\frac{n\bar{x}}{n}=
+\bar{x}-\bar{x}=0$$
+
+Vejamos agora que ao se dividir a variável pelo seu desvio padrão a variável transformada tem variância igual a 1. A variância é dada por:
+$$\sigma^2=\sum_{i=1}^n \frac{(x_i-\bar{x})^2}{n}$$
+
+com a divisão $w_i=\frac{xi}{\sigma}$ tem-se: 
+$$\bar{w}= \sum_{i=1}^n \frac{w_i}{n}=\sum_{i=1}^n \frac{x_i}{n\sigma}=\frac{1}{\sigma}\sum_{i=1}^n \frac{x_i}{n}=\frac{\bar{x}}{\sigma}$$
+
+e assim a variância de W é dada por:
+$$\sum_{i=1}^n \frac{(w_i-\bar{w})^2}{n}=
+\sum_{i=1}^n \frac{(\frac{x_i}{\sigma}-\frac{\bar{x}}{\sigma})^2}{n}=
+\sum_{i=1}^n \frac{(x_i-\bar{x})^2}{n\sigma^2}=
+\frac{1}{\sigma^2}\sum_{i=1}^n \frac{(x_i-\bar{x})^2}{n}=
+\frac{\sigma^2}{\sigma^2} =1$$
+
+
+###Dica para a utilização da linguagem R
+
+Para calcular uma probabilidade associada a uma distribuição normal padrão ($\mu=0$ , $\sigma^2=1$) por exemplo $P(Z<-0,75)$
+```{r}
+pnorm(-0.75,0,1)
+```
+
+Para calcular uma probabilidade associada a uma distribuição normal com outros parâmetros diferentes da Normal como na questão dois com média de 173cm e desvio-padrão de 7,3cm no caso $P(X>180)$ utiliza-se:
+```{r}
+1 - pnorm(180, 173, 7.3)
+```
+Note que o valor foi subtraido de um pois a função _pnorm_ calcula por padrão, como a tabela vista, as probabilidades à esquerda, ou seja de observar um valor menor ou igual da variável. Como no exemplo o interesse era na probabilidade de uma pessoa maior que 180cm encontra-se a probabilidade e uma pessoa ter menos que 180 e obtem-se o complementar subtraindo esse valor de 1. 
+
+Use o software para calcular os valores obtidos nas questões 1 e 2.
+Para os itens da questão 2 faça tambêm as contas aplicando a transformação para normal padrão.
