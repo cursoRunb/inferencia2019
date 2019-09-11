@@ -1,0 +1,84 @@
+---
+title: "Análise de Variância"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+A técnica de análise de variância permite fazer a comparação de múltiplas médias por meio de um teste de hipóteses. A construção do teste se dá pela decomposição da variabilidade em componentes referentes aos diferentes grupos e à variabilidade inerente das observações dentro dos grupos. 
+
+Considera-se o seguinte modelo:
+
+$$y_{ij}=\mu+\tau_i+e_{ij}$$
+
+Nesse modelo a variável resposta $Y$ é descrita pela média geral $\mu$ mais um efeito de grupo $\tau$ mais um erro aleatório. O índice $i=1,2,\ldots,a$ representa os diferentes grupos e o índice $j=1,2,\ldots,n$ representa os diferentes elementos dentro de cada grupo. Considerando $\bar{y}_{..}=\sum_{i=1}^a\sum_{j=1}^n\frac{y_{ij}}{n}$ a média geral e $\bar{y}_{i.}=\sum_{j=1}^n\frac{y_{ij}}{n}$ a média do grupo $i$, a decomposição da variabilidade se dá na forma:
+
+$$\sum_{i=1}^a\sum_{j=1}^n(y_{ij}-\bar{y}_{..})=\sum_{i=1}^a\sum_{j=1}^n(\bar{y}_{i.}-\bar{y}_{..})+\sum_{i=1}^a\sum_{j=1}^n(y_{ij}-\bar{y}_{i.})$$
+
+$$SQTOT=SQTRAT+SQRES$$
+
+Partido da suposição que os erros $e_{ij}$ são independentes e idênticamente distribuidos _(i.i.d)_ com distribuição $Normal(\mu=0,\sigma^2)$ pode-se testar as seguintes hipóteses:
+
+* $H_0:\tau_1=\tau_2=\ldots=\tau_a=0$
+
+* $H_a: \exists \tau_i \neq 0$
+
+Usando a seguinte estatística de teste:
+
+$$F=\frac{\frac{SQTRAT}{(a-1)}}{\frac{SQRES}{(an-a)}}$$
+
+que sob hipótese nula tem distribuição $F((a-1),(an-a))$
+
+#####Exemplo
+
+O conjunto de dados _iris_ disponível no R apresenta medidas de comprimento e largura de pétalas e sépalas e classificação de 3 espécies de um tipo de flor. Nesse exemplo de aplicação a técnica de análise de variância será utilizada para avaliar se existem diferenças entre as médias de comprimento das pétalas das flores das diferentes espécies.
+
+```{r}
+modelo <- aov(iris$Petal.Length~iris$Species)
+summary(modelo)
+```
+
+O resultado acima é uma representação da tabela de análise de variância, que apresenta as principais informações consideradas para realizar o teste, sendo elas: 
+
+* As somas de quadrado, que são os componentes da decomposição da variabilidade 
+
+* Os quadrados médias, que são as somas de quadrados divididas pelos seus graus de liberdade
+
+* A estatística de teste F
+
+* O p-valor para o teste
+
+Como se pode perceber nesse teste o p-valor é muito pequeno, indicando a rejeição da hipótese de igualdade entre as médias. O gráfico abaixo ilustra a distribuição dos comprimentos de pétalas para as diferentes espécies, e pode-se notar a evidente diferença entre as espécies, confirmando o resultado do teste.
+
+```{r}
+boxplot(iris$Petal.Length~iris$Species)
+```
+
+Os resultados de análise de variância não permitem identificar entre quais grupos as médias são distintas, e uma das possíveis técnicas para identificar os pares de grupos que tenhas médias diferentes é o teste de Tukey, que tem por propriedade controlar o erro global do experimento.
+
+```{r}
+TukeyHSD(modelo)
+```
+
+Os resultados desse teste confirmam a impressão visual de que todas as espécies tem médias distintas quando comparadas duas a duas. 
+
+É importante perceber que as conclusões da análise de variância será valida somente se as suposições adotadas forem adequadas. A seguir será realizado um teste de normalidade para os resíduos.
+
+```{r}
+shapiro.test(modelo$residuals)
+```
+No teste de Shapiro-Wilk a hipótese nula é de que os dados tenham distribuição Normal e pelo p-valor obtido para os resíduos do modelo considerado, deve-se rejeitar a hipótese de normalidade e portanto a técnica de análise de variância para esses dados não se mostra adequada. 
+
+Uma alternativa à Análise de Variância é o teste de Kruskal-Wallis, que é um teste dito não paramétrico pois não faz suposições sobre a forma ou os parâmetros das distribuições dos dados em teste. As hipóteses em teste são semelhantes às hipóteses consideradas na análise de variância.
+
+```{r}
+kruskal.test(iris$Petal.Length,iris$Species)
+```
+
+Considerando o pequeno valor observado para o p-valor do teste, deve-se rejeitar a hipótese de igualdade entre as médias. 
+
+Uma alternativa não paramétrica para o teste de Tukey seria o teste de Dunn

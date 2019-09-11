@@ -1,0 +1,26 @@
+---
+title: "Exercício de aula"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Por favor façam o preenchimento de um breve questionário de avaliação do curso disponível em:
+
+#[Avaliação](https://forms.gle/cznuTNGTPQaRWMK88) 
+
+https://forms.gle/cznuTNGTPQaRWMK88
+
+##Exercício
+
+Faça a importação dos dados sobre tarifas de energia elétrica:
+
+https://raw.githubusercontent.com/gustavopompeu/ENAP/master/TarifaFornecimentoResidencial.csv
+
+Esse conjunto de dados tem variáveis qualitativas e variáveis quantitativas. 
+
+Para as variáveis quantitativas é possível fazer testes de comparação de médias? Quais tipos?
+
+Apresente exemplos e interprete os resultados.
