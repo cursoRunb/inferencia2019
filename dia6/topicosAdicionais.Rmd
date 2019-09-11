@@ -81,4 +81,10 @@ kruskal.test(iris$Petal.Length,iris$Species)
 
 Considerando o pequeno valor observado para o p-valor do teste, deve-se rejeitar a hipótese de igualdade entre as médias. 
 
-Uma alternativa não paramétrica para o teste de Tukey seria o teste de Dunn
+Uma alternativa não paramétrica para o teste de Tukey seria o teste de Dunn, disponível no pacote _dunn.test_
+
+```{r}
+require(dunn.test)
+dunn.test(iris$Sepal.Length,iris$Species)
+```
+
